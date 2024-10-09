@@ -1,27 +1,51 @@
-import {FlatList, StyleSheet, View} from 'react-native';
+import {Button, FlatList, StatusBar, StyleSheet, View} from 'react-native';
 import {useState} from "react";
 import {GoalItem} from "./components/GoalItem";
 import {GoalInput} from "./components/GoalInput";
 
 export default function App() {
   const [goalList, setGoalList] = useState([]);
+  let [showModal, setShowModal] = useState(false);
 
   function handleAddGoal(goalText) {
     setGoalList(gl => [...gl, {id: Math.random().toString(), text: goalText}]);
   }
 
+  function deleteGoalItemHandler(id) {
+    setGoalList(gl => gl.filter(g => g.id !== id));
+  }
+
+  function startAddGoalHandler() {
+    setShowModal(true);
+  }
+
+  function closeModal() {
+    setShowModal(false);
+  }
+
   return (
-    <View style={styles.appContainer}>
-      <GoalInput onAddGoal={handleAddGoal}/>
+    <>
+      <StatusBar style={'auto'}/>
+      <View style={styles.appContainer}>
+      <Button title={'Add New Goal'}
+              onPress={startAddGoalHandler}
+              color={'#6341b6'}
+      />
+      <GoalInput onAddGoal={handleAddGoal}
+                 visible={showModal}
+                 closeModal={closeModal}
+      />
 
       <View style={styles.goalContainer}>
         <FlatList data={goalList}
                   keyExtractor={(item) => item.id}
                   renderItem={(goalData) => {
-                    return <GoalItem data={goalData.item}/>
+                    return <GoalItem data={goalData.item}
+                                     onDelete={deleteGoalItemHandler}
+                    />
                   }}/>
       </View>
-    </View>
+    </View></>
   );
 }
 
@@ -30,7 +54,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 50,
     paddingHorizontal: 20,
-    backgroundColor: '#fff',
   },
   addGoalBtnStyle: {
     display: 'flex',

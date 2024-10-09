@@ -1,41 +1,62 @@
-import {Button, TextInput, View, StyleSheet} from "react-native";
+import {Button, TextInput, View, StyleSheet, Modal, Image} from "react-native";
 import {useState} from "react";
 
-export function GoalInput({onAddGoal}) {
+export function GoalInput({onAddGoal, visible, closeModal}) {
   const [goalText, setGoalText] = useState();
 
   return (
-    <View style={styles.inputContainer}>
-      <TextInput style={styles.textInputStyle}
-                 placeholder={"Your course goal ..."}
-                 onChangeText={(value) => setGoalText(value)}
-                 value={goalText}
-      />
-      <Button title={"Add goal"}
-              onPress={() => {
-                onAddGoal(goalText)
-                setGoalText("");
-              }}/>
-    </View>
+    <Modal visible={visible} animationType={'slide'}>
+      <View style={styles.inputContainer}>
+        <Image source={require('../assets/images/goal.png')}
+               style={styles.image}/>
+        <TextInput style={styles.textInput}
+                   placeholder={"Your course goal ..."}
+                   onChangeText={(value) => setGoalText(value)}
+                   value={goalText}
+        />
+        <View style={styles.buttonContainer}>
+          <Button title={"Add goal"}
+                   onPress={() => {
+                     onAddGoal(goalText)
+                     setGoalText("");
+                     closeModal();
+                   }}/>
+          <Button title={'Cancel'}
+                  onPress={()=> {
+            closeModal();
+            setGoalText("");
+          }}/>
+        </View>
+      </View>
+    </Modal>
   );
 }
 
 const styles = StyleSheet.create({
   inputContainer: {
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#a4a4a4',
+    backgroundColor: '#311b6b',
     flex: 1,
   },
-  textInputStyle: {
+  textInput: {
     borderWidth: 1,
-    borderColor: '#b9b6b6',
-    width: '80%',
-    marginRight: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 4
+    backgroundColor: '#e4d0ff',
+    width: '90%',
+    padding: 8,
+    color: '#120438',
+    borderRadius: 6,
   },
+  image: {
+    width: 100,
+    height: 100,
+    marginBottom: 16
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 16
+  }
 })
