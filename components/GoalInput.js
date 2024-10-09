@@ -3,12 +3,12 @@ import {useState} from "react";
 
 export function GoalInput({onAddGoal, visible, closeModal}) {
   const [goalText, setGoalText] = useState();
-
   return (
     <Modal visible={visible} animationType={'slide'}>
       <View style={styles.inputContainer}>
-        <Image source={require('../assets/images/goal.png')}
-               style={styles.image}/>
+        <Image
+          source={require('../assets/images/goal.png')}
+          style={styles.image}/>
         <TextInput style={styles.textInput}
                    placeholder={"Your course goal ..."}
                    onChangeText={(value) => setGoalText(value)}
